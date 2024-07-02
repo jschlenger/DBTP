@@ -1,0 +1,38 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+@prefix bot: <https://w3id.org/bot#> .
+@prefix beo: <https://pi.pauwel.be/voc/buildingelement#> .
+@prefix props: <http://lbd.arch.rwth-aachen.de/props#> .
+
+@prefix inst: <http://bim2twin.eu/conslam_knowledge/> .
+@prefix info: <http://bim2twin.eu/conslam_information/> .
+@prefix know: <http://bim2twin.eu/conslam_knowledge/> .
+@prefix sosa: <http://www.w3.org/ns/sosa/> .
+@prefix ssn: <http://www.w3.org/ns/ssn/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix iana: <https://www.iana.org/assignments/media-types/> .
+
+@prefix s4city: <https://saref.etsi.org/saref4city/> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+
+inst:percentageofdelayeddaysperworkpackage 
+    rdf:type                s4city:KeyPerformanceIndicator ;
+    s4city:quantifiesKPI    inst:dataset_01 ;
+    saref:hasName           "Percentage of delayed days per workpackage" ;
+    saref:hasDescription    "KPI which is calculated by dividing the number of days of delay for each work package by the total number of days since the as-planned start of the work package" .
+
+inst:dataset_01
+    rdf:type            dcat:Dataset ;
+    rdf:type            s4city:KeyPerformanceIndicatorAssessment .
+
+inst:influxbucket_kpi1
+    rdf:type                dcat:DataService ;
+    dcat:servesDataset      inst:dataset_01 ;
+    dcat:endpointUrl        "https://eu-central-1-1.aws.cloud2.influxdata.com/" ;
+    dcterms:identifier      "bucket=API,measurement=kpi_1" .

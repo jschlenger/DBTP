@@ -1,0 +1,126 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+@prefix bot: <https://w3id.org/bot#> .
+@prefix beo: <https://pi.pauwel.be/voc/buildingelement#> .
+@prefix props: <http://lbd.arch.rwth-aachen.de/props#> .
+
+@prefix inst: <http://bim2twin.eu/conslam_data/> .
+@prefix info: <http://bim2twin.eu/conslam_information/> .
+@prefix know: <http://bim2twin.eu/conslam_knowledge/> .
+@prefix sosa: <http://www.w3.org/ns/sosa/> .
+@prefix ssn: <http://www.w3.org/ns/ssn/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix iana: <https://www.iana.org/assignments/media-types/> .
+
+inst:conslam_construction_monitoring_platform
+    rdf:type            sosa:Platform ;
+    sosa:hosts          inst:pointpix_laser_scanner .
+
+inst:pointpix_laser_scanner
+    rdf:type                sosa:Sensor ;
+    sosa:isHostedBy         inst:conslam_construction_monitoring_platform ;
+    sosa:madeObservation    inst:observation_01032022 ;
+    sosa:madeObservation    inst:observation_15032022 ;
+    sosa:madeObservation    inst:observation_29032022 ;
+    sosa:madeObservation    inst:observation_12042022 ;
+    sosa:madeObservation    inst:observation_26042022 .
+
+inst:observation_01032022
+    rdf:type            sosa:Observation ;
+    sosa:madeBySensor   inst:pointpix_laser_scanner ;
+    sosa:hasFeatureOfInterest:  info:building_553a6e05-646e-428c-9bd5-5d8806bac087 ;
+    sosa:resultTime     "2022-03-01T07:00:00"^^xsd:dateTime ;
+    sosa:hasResult      inst:dataset_01032022 .
+
+inst:dataset_01032022
+    rdf:type            dcat:Dataset ;
+    rdf:type            sosa:Result ;
+    dcat:distribution   inst:distribution_01032022 .
+
+inst:distribution_01032022
+    rdf:type            dcat:Distribution ;
+    dcat:downloadUrl    "localhost:9000/pointclouds/scan_01032022.e57" ;
+    dcat:mediaType      <https://www.iana.org/assignments/media-types/model/e57> .
+
+inst:observation_15032022
+    rdf:type            sosa:Observation ;
+    sosa:madeBySensor   inst:pointpix_laser_scanner ;
+    sosa:hasFeatureOfInterest   info:building_553a6e05-646e-428c-9bd5-5d8806bac087 ;
+    sosa:resultTime     "2022-03-15T07:00:00"^^xsd:dateTime ;
+    sosa:hasResult      inst:dataset_15032022 .
+
+inst:dataset_15032022
+    rdf:type            dcat:Dataset ;
+    rdf:type            sosa:Result ;
+    dcat:distribution   inst:distribution_15032022 .
+
+inst:distribution_15032022
+    rdf:type            dcat:Distribution ;
+    dcat:downloadUrl    "localhost:9000/pointclouds/scan_15032022.e57" ;
+    dcat:mediaType      <https://www.iana.org/assignments/media-types/model/e57> .
+
+inst:observation_29032022
+    rdf:type            sosa:Observation ;
+    sosa:madeBySensor   inst:pointpix_laser_scanner ;
+    sosa:hasFeatureOfInterest   info:building_553a6e05-646e-428c-9bd5-5d8806bac087 ;
+    sosa:resultTime     "2022-03-29T07:00:00"^^xsd:dateTime ;
+    sosa:hasResult      inst:dataset_29032022 .
+
+inst:dataset_29032022
+    rdf:type            dcat:Dataset ;
+    rdf:type            sosa:Result ;
+    dcat:distribution   inst:distribution_29032022 .
+
+inst:distribution_29032022
+    rdf:type            dcat:Distribution ;
+    dcat:downloadUrl    "localhost:9000/pointclouds/scan_29032022.e57" ;
+    dcat:mediaType      <https://www.iana.org/assignments/media-types/model/e57> .
+
+inst:observation_12042022
+    rdf:type            sosa:Observation ;
+    sosa:madeBySensor   inst:pointpix_laser_scanner ;
+    sosa:hasFeatureOfInterest   info:building_553a6e05-646e-428c-9bd5-5d8806bac087 ;
+    sosa:resultTime     "2022-04-12T07:00:00"^^xsd:dateTime ;
+    sosa:hasResult      inst:dataset_12042022 .
+
+inst:dataset_12042022
+    rdf:type            dcat:Dataset ;
+    rdf:type            sosa:Result ;
+    dcat:distribution   inst:distribution_12042022 .
+
+inst:distribution_12042022
+    rdf:type            dcat:Distribution ;
+    dcat:downloadUrl    "localhost:9000/pointclouds/scan_12042022.e57" ;
+    dcat:mediaType      <https://www.iana.org/assignments/media-types/model/e57> .
+
+inst:observation_26042022
+    rdf:type            sosa:Observation ;
+    sosa:madeBySensor   inst:pointpix_laser_scanner ;
+    sosa:hasFeatureOfInterest   info:building_553a6e05-646e-428c-9bd5-5d8806bac087 ;
+    sosa:resultTime     "2022-04-26T07:00:00"^^xsd:dateTime ;
+    sosa:hasResult      inst:dataset_26042022 .
+
+inst:dataset_26042022
+    rdf:type            dcat:Dataset ;
+    rdf:type            sosa:Result ;
+    dcat:distribution   inst:distribution_26042022 .
+
+inst:distribution_26042022
+    rdf:type            dcat:Distribution ;
+    dcat:downloadUrl    "localhost:9000/pointclouds/scan_26042022.e57" ;
+    dcat:mediaType      <https://www.iana.org/assignments/media-types/model/e57> .
+
+info:building_553a6e05-646e-428c-9bd5-5d8806bac087
+    rdf:type                                    bot:Building ;
+    props:globalIdIfcRoot_attribute_simple      "1LEcu5P6v2Z9lLNOW6ki27" ;
+    props:objectTypeIfcObject_attribute_simple  "" ;
+    sosa:isFeatureOfInterestOf                  inst:observation_01032022 ;
+    sosa:isFeatureOfInterestOf                  inst:observation_15032022 ;
+    sosa:isFeatureOfInterestOf                  inst:observation_29032022 ;
+    sosa:isFeatureOfInterestOf                  inst:observation_12042022 ;
+    sosa:isFeatureOfInterestOf                  inst:observation_26042022 .
