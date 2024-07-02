@@ -48,7 +48,7 @@ Five laser scans of the ConSLAM dataset were compared with the as-designed infor
 The insights gained from this comparison were added to the Information Layer through the platform's API.
 The final graph, after running the progress monitoring for all laser scans, is provided as an RDF graph in Turtle format.
 
-Finally, two KPIs were calculated and stored in the InfluxDB Cloud database. 
+Finally, a KPI was calculated and stored in the InfluxDB Cloud database. 
 This data was exported to CSV and published here, together with the RDF graph for the Knowledge Layer, which provides general information about the individual KPIs.
 
 ## License
