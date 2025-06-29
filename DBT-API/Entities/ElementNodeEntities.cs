@@ -16,6 +16,15 @@ namespace DBT_API.Entities
 
     public class Element : Thing
     {
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#isAsDesigned")]
+        public bool _isAsDesigned { get; set; }
+
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#progress")]
+        public int _progress { get; set; }
+
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#timeStamp")]
+        public DateTime _timeStamp { get; set; }
+
         [JsonProperty(PropertyName = "http://lbd.arch.rwth-aachen.de/props#globalIdIfcRoot_attribute_simple")]
         public string _globalIdIfcRoot_attribute_simple { get; set; }
 

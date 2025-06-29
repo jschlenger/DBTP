@@ -4,23 +4,23 @@ namespace DBT_API.Entities
 {
     public class Thing : Node
     {
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#id")]
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#id")]
         public int _id { get; set; }
         [JsonProperty(PropertyName = "http://iot.linkeddata.es/def/wot#name")]
         public string _name { get; set; }
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#classificationCode")]
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#classificationCode")]
         public string _classificationCode { get; set; }
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#classificationSystem")]
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#classificationSystem")]
         public string _classificationSystem { get; set; }
     }
 
     public class AsPlannedResource : Resource
     {
 
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#contractedEnd")]
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#contractedEnd")]
         public DateTime _contractedEnd { get; set; }
 
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#contractedStart")]
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#contractedStart")]
         public DateTime _contractedStart { get; set; }
 
     }
@@ -45,19 +45,6 @@ namespace DBT_API.Entities
 
     }
 
-    public class Point : SpatialThing
-    {
-
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#timeStamp")]
-        public DateTime _timeStamp { get; set; }
-
-    }
-
-    public class WorkPackage : Process
-    {
-
-    }
-
     public class AsPlannedWorkerCrew : AsPlannedResource
     {
 
@@ -73,34 +60,24 @@ namespace DBT_API.Entities
 
     }
 
-    public class Activity : Process
-    {
-
-    }
-
     public class ZonePrecondition : Precondition
     {
 
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#availableFrom")]
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#availableFrom")]
         public DateTime _availableFrom { get; set; }
 
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#availableTill")]
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#availableTill")]
         public DateTime _availableTill { get; set; }
-
-    }
-
-    public class Construction : Process
-    {
 
     }
 
     public class ConstructionSchedule : Thing
     {
 
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#baselinePlanFrom")]
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#baselinePlanFrom")]
         public DateTime _baselinePlanFrom { get; set; }
 
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#baselinePlanTill")]
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#baselinePlanTill")]
         public DateTime _baselinePlanTill { get; set; }
 
     }
@@ -108,10 +85,10 @@ namespace DBT_API.Entities
     public class Defect : Thing
     {
 
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#criticality")]
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#criticality")]
         public int _criticality { get; set; }
 
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#timeStamp")]
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#timeStamp")]
         public DateTime _timeStamp { get; set; }
 
     }
@@ -119,7 +96,7 @@ namespace DBT_API.Entities
     public class ExternalFactorPrecondition : Precondition
     {
 
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#thresholdValue")]
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#thresholdValue")]
         public double _thresholdValue { get; set; }
 
     }
@@ -129,34 +106,13 @@ namespace DBT_API.Entities
 
     }
 
-    public class SpatialThing : Thing
-    {
-
-    }
-
     public class InformationPrecondition : Precondition
     {
 
     }
 
-    public class Action : Process
-    {
-
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#contractor")]
-        public string _contractor { get; set; }
-
-    }
-
     public class LocationBreakdownStructure : Thing
     {
-
-    }
-
-    public class Operation : Process
-    {
-
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#timeStamp")]
-        public DateTime _timeStamp { get; set; }
 
     }
 
@@ -178,7 +134,7 @@ namespace DBT_API.Entities
     public class Precondition : Thing
     {
 
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#fulfilled")]
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#fulfilled")]
         public bool _fulfilled { get; set; }
 
     }
@@ -186,10 +142,10 @@ namespace DBT_API.Entities
     public class AsPerformedResource : Resource
     {
 
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#contractedEnd")]
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#contractedEnd")]
         public DateTime _contractedEnd { get; set; }
 
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#contractedStart")]
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#contractedStart")]
         public DateTime _contractedStart { get; set; }
 
     }
@@ -229,10 +185,13 @@ namespace DBT_API.Entities
     public class Process : Thing
     {
 
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#endTime")]
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#contractor")]
+        public string _contractor { get; set; }
+
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#endTime")]
         public DateTime _endTime { get; set; }
 
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#startTime")]
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#startTime")]
         public DateTime _startTime { get; set; }
 
     }
@@ -250,13 +209,13 @@ namespace DBT_API.Entities
     public class Resource : Thing
     {
 
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#contractor")]
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#contractor")]
         public string _contractor { get; set; }
 
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#cost")]
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#cost")]
         public double _cost { get; set; }
 
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#quantity")]
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#quantity")]
         public double _quantity { get; set; }
 
     }
@@ -274,16 +233,16 @@ namespace DBT_API.Entities
     public class ResourceApplication : Thing
     {
 
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#endTime")]
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#endTime")]
         public DateTime _endTime { get; set; }
 
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#quantity")]
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#quantity")]
         public double _quantity { get; set; }
 
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#startTime")]
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#startTime")]
         public DateTime _startTime { get; set; }
 
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#utilizationRate")]
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#utilizationRate")]
         public double _utilizationRate { get; set; }
 
     }
@@ -291,30 +250,22 @@ namespace DBT_API.Entities
     public class ResourceAssignment : Precondition
     {
 
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#endTime")]
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#endTime")]
         public DateTime _endTime { get; set; }
 
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#quantity")]
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#quantity")]
         public double _quantity { get; set; }
 
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#startTime")]
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#startTime")]
         public DateTime _startTime { get; set; }
 
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#utilizationRate")]
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#utilizationRate")]
         public double _utilizationRate { get; set; }
 
     }
 
     public class AsPlannedEquipment : AsPlannedResource
     {
-
-    }
-
-    public class Taski : Process
-    {
-
-        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology#contractor")]
-        public string _contractor { get; set; }
 
     }
 
@@ -328,40 +279,66 @@ namespace DBT_API.Entities
 
     }
 
+    public class AsPerformedProcess : Process
+    {
+
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#timeStamp")]
+        public DateTime _timeStamp { get; set; }
+
+    }
+
+    public class AsPlannedProcess : Process
+    {
+
+    }
+
+    public class ProcessDecomposition : Thing
+    {
+
+        [JsonProperty(PropertyName = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#decompositionLevel")]
+        public int _decompositionLevel { get; set; }
+
+    }
+
+    public class DecompositionCriterium : Thing
+    {
+
+    }
+
     public static class SequenceType
     {
 
-        public static readonly string EndEnd = "https://dtc-ontology.cms.ed.tum.de/ontology#EndEnd";
-        public static readonly string EndStart = "https://dtc-ontology.cms.ed.tum.de/ontology#EndStart";
-        public static readonly string StartEnd = "https://dtc-ontology.cms.ed.tum.de/ontology#StartEnd";
-        public static readonly string StartStart = "https://dtc-ontology.cms.ed.tum.de/ontology#StartStart";
+        public static readonly string EndEnd = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#EndEnd";
+        public static readonly string EndStart = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#EndStart";
+        public static readonly string StartEnd = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#StartEnd";
+        public static readonly string StartStart = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#StartStart";
 
     }
 
     public static class DefectStatusType
     {
 
-        public static readonly string Ongoing = "https://dtc-ontology.cms.ed.tum.de/ontology#Ongoing";
-        public static readonly string Resolved = "https://dtc-ontology.cms.ed.tum.de/ontology#Resolved";
+        public static readonly string Ongoing = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#Ongoing";
+        public static readonly string Resolved = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#Resolved";
 
     }
 
     public static class GeometryStatusType
     {
 
-        public static readonly string CompletelyDetected = "https://dtc-ontology.cms.ed.tum.de/ontology#CompletelyDetected";
-        public static readonly string NotDetected = "https://dtc-ontology.cms.ed.tum.de/ontology#NotDetected";
-        public static readonly string PartiallyDetected = "https://dtc-ontology.cms.ed.tum.de/ontology#PartiallyDetected";
+        public static readonly string CompletelyDetected = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#CompletelyDetected";
+        public static readonly string NotDetected = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#NotDetected";
+        public static readonly string PartiallyDetected = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#PartiallyDetected";
 
     }
 
     public static class StatusType
     {
 
-        public static readonly string Finished = "https://dtc-ontology.cms.ed.tum.de/ontology#Finished";
-        public static readonly string InWork = "https://dtc-ontology.cms.ed.tum.de/ontology#InWork";
-        public static readonly string NotStarted = "https://dtc-ontology.cms.ed.tum.de/ontology#NotStarted";
-        public static readonly string Paused = "https://dtc-ontology.cms.ed.tum.de/ontology#Paused";
+        public static readonly string Finished = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#Finished";
+        public static readonly string InWork = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#InWork";
+        public static readonly string NotStarted = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#NotStarted";
+        public static readonly string Paused = "https://dtc-ontology.cms.ed.tum.de/ontology/v2#Paused";
 
     }
 }
