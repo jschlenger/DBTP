@@ -102,8 +102,7 @@ namespace DBT_API.Util
                     {
                         if (((Element)nodes.ElementAt(i))._globalIdIfcRoot_attribute_simple == box.Item1)
                         {
-                            Edge edge = CreateEdge("https://www.bim2twin.eu/ontology/Core#hasGeometry", domain + "geometry" + ID.ToString());
-                            //old version: http://www.opengis.net/ont/geosparql#hasGeometry
+                            Edge edge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#hasGeometry", domain + "geometry" + ID.ToString());
                             if (nodes.ElementAt(i).Relations != null)
                                 nodes.ElementAt(i).Relations.Add(edge);
                             else

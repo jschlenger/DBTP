@@ -177,7 +177,7 @@ namespace DBT_API.Repositories
 
                 var geometryIri = allGraphs.Information
                     .FirstOrDefault(item => item.IRI == ifcIri)?.Relations
-                    .FirstOrDefault(edgi => edgi.Name == "https://www.bim2twin.eu/ontology/Core#hasGeometry")
+                    .FirstOrDefault(edgi => edgi.Name == "https://dtc-ontology.cms.ed.tum.de/ontology/v2#hasGeometry")
                     ?.ObjectIRI;
 
                 if (geometryIri != null)
