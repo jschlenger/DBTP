@@ -43,7 +43,7 @@ namespace DBT_API.Util
 
                 ConstructionSchedule constructionSchedule = new()
                 {
-                    Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology#ConstructionSchedule" },
+                    Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology/v2#ConstructionSchedule" },
                     Domain = domain,
                     IRI = domain + "initialSchedule",
                     _name = "Initial construction schedule",
@@ -88,16 +88,16 @@ namespace DBT_API.Util
 
                     List<Edge> wpEdges = new();
 
-                    WorkPackage workPackage = new()
+                    AsPlannedProcess workPackage = new()
                     {
                         Domain = domain,
                         IRI = domain + "workpackage" + workpackageID.ToString(),
                         _id = workpackageID,
-                        Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology#WorkPackage" },
+                        Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology/v2#AsPlannedProcess" },
                         _name = workpackageName,
                     };
 
-                    Edge scheduleEdge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology#hasWorkPackage", workPackage.IRI);
+                    Edge scheduleEdge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#hasProcess", workPackage.IRI);
                     scheduleEdges.Add(scheduleEdge);
 
                     if (preconditionIDs.Count != 0)
@@ -109,19 +109,19 @@ namespace DBT_API.Util
                                 Domain = domain,
                                 IRI = domain + "precondition" + workpackageID.ToString() + "_" + j.ToString(),
                                 //_id
-                                Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology#ProcessPrecondition" },
+                                Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology/v2#ProcessPrecondition" },
                                 _fulfilled = false,
                                 //_hasSequenceType = SequenceType.StartEnd
                             };
 
                             string ppTargetIri = domain + "workpackage" + preconditionIDs[j].ToString();
-                            Edge ppEdge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology#requiresProcess", ppTargetIri);
+                            Edge ppEdge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#requiresProcess", ppTargetIri);
                             pp.Relations = new List<Edge> { ppEdge };
 
-                            AddEdge(pp, "https://dtc-ontology.cms.ed.tum.de/ontology#hasSequenceType", SequenceType.StartEnd);
+                            AddEdge(pp, "https://dtc-ontology.cms.ed.tum.de/ontology/v2#hasSequenceType", SequenceType.StartEnd);
 
                             string wpTargetIri = domain + "precondition" + workpackageID.ToString() + "_" + j.ToString();
-                            Edge wpEdge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology#hasPrecondition", wpTargetIri);
+                            Edge wpEdge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#hasPrecondition", wpTargetIri);
                             wpEdges.Add(wpEdge);
 
                             nodes.Add(pp);
@@ -130,12 +130,12 @@ namespace DBT_API.Util
 
                     // add activities for cast in place concreting
                     // place rebar
-                    DBT_API.Entities.Activity act1 = new()
+                    AsPlannedProcess act1 = new()
                     {
                         Domain = domain,
                         IRI = domain + "activity" + workpackageID.ToString() + "_1",
                         //_id = 0,
-                        Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology#Activity" },
+                        Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology/v2#AsPlannedProcess" },
                         _name = "Place rebar for " + workpackageName,
                         _startTime = startTime,
                         _endTime = endTime,
@@ -147,9 +147,9 @@ namespace DBT_API.Util
                     int counter = 1;
                     foreach (string link in ifcLinkIDs)
                     {
-                        Taski taski = new()
+                        AsPlannedProcess taski = new()
                         {
-                            Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology#Task" },
+                            Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology/v2#AsPlannedProcess" },
                             Domain = domain,
                             IRI = domain + "task" + workpackageID.ToString() + "_1" + "_" + counter.ToString(),
                             _contractor = "company name",
@@ -169,31 +169,60 @@ namespace DBT_API.Util
                             }
                         }
                         //string elementTargetIri = domain + "ifc-" + link;
-                        Edge taskEdge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology#hasTarget", elementTargetIri);
+                        Edge taskEdge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#hasTarget", elementTargetIri);
                         taski.Relations = new List<Edge> { taskEdge };
                         nodes.Add(taski);
 
                         string taskTargetIri = domain + "activity" + workpackageID.ToString() + "_1";
-                        Edge actEdge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology#hasTask", taski.IRI);
+                        Edge actEdge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#hasChildProcess", taski.IRI);
                         act1Edges.Add(actEdge);
 
                         counter++;
                     }
 
+                    // add process decomposition
+                    ProcessDecomposition decompAct1 = new()
+                    {
+                        Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology/v2#ProcessDecomposition" },
+                        Domain = domain,
+                        IRI = domain + "decomposition_act_" + workpackageID.ToString() + "_1",
+                        _name = "Process decomposition for activity " + workpackageID.ToString() + "_1",
+                        _decompositionLevel = 2,
+                    };
+
+                    string act1DecompositionTarget = domain + "decomposition_act_" + workpackageID.ToString() + "_1";
+                    Edge act1Decomp = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#isDecomposedInto", act1DecompositionTarget);
+                    act1Edges.Add(act1Decomp);
+
+                    DecompositionCriterium critAct1 = new()
+                    {
+                        Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology/v2#DecompositionCriterium" },
+                        Domain = domain,
+                        IRI = domain + "decomposition_crit_act_" + workpackageID.ToString() + "_1",
+                        _name = "Element",
+                    };
+
+                    string decompAct1CritTarget = domain + "decomposition_crit_wp_" + workpackageID.ToString() + "_1";
+                    Edge decompAct1Crit = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#hasDecompositionCriterium", decompAct1CritTarget);
+                    decompAct1.Relations = new List<Edge> { decompAct1Crit };
+
+                    nodes.Add(decompAct1);
+                    nodes.Add(critAct1);
+
                     act1.Relations = act1Edges;
                     nodes.Add(act1);
 
                     string wpTargetIri1 = domain + "activity" + workpackageID.ToString() + "_1";
-                    Edge wpEdge1 = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology#hasActivity", wpTargetIri1);
+                    Edge wpEdge1 = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#hasChildProcess", wpTargetIri1);
                     wpEdges.Add(wpEdge1);
 
                     // place formwork
-                    DBT_API.Entities.Activity act2 = new()
+                    AsPlannedProcess act2 = new()
                     {
                         Domain = domain,
                         IRI = domain + "activity" + workpackageID.ToString() + "_2",
                         //_id = 0,
-                        Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology#Activity" },
+                        Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology/v2#AsPlannedProcess" },
                         _name = "Place formwork for " + workpackageName,
                         _startTime = startTime,
                         _endTime = endTime,
@@ -207,19 +236,19 @@ namespace DBT_API.Util
                         Domain = domain,
                         IRI = domain + "precondition" + workpackageID.ToString() + "_2_1",
                         //_id
-                        Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology#ProcessPrecondition" },
+                        Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology/v2#ProcessPrecondition" },
                         _fulfilled = false,
                         //_hasSequenceType = SequenceType.StartEnd
                     };
 
                     string pp1TargetIri = domain + "activity" + workpackageID.ToString() + "_1";
-                    Edge pp1Edge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology#requiresProcess", pp1TargetIri);
+                    Edge pp1Edge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#requiresProcess", pp1TargetIri);
                     pp1.Relations = new List<Edge> { pp1Edge };
 
-                    AddEdge(pp1, "https://dtc-ontology.cms.ed.tum.de/ontology#hasSequenceType", SequenceType.StartEnd);
+                    AddEdge(pp1, "https://dtc-ontology.cms.ed.tum.de/ontology/v2#hasSequenceType", SequenceType.StartEnd);
 
                     string act2TargetIri = domain + "precondition" + workpackageID.ToString() + "_2_1";
-                    Edge act2Edge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology#hasPrecondition", act2TargetIri);
+                    Edge act2Edge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#hasPrecondition", act2TargetIri);
                     act2Edges.Add(act2Edge);
 
                     nodes.Add(pp1);
@@ -227,9 +256,9 @@ namespace DBT_API.Util
                     counter = 1;
                     foreach (string link in ifcLinkIDs)
                     {
-                        Taski taski = new()
+                        AsPlannedProcess taski = new()
                         {
-                            Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology#Task" },
+                            Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology/v2#AsPlannedProcess" },
                             Domain = domain,
                             IRI = domain + "task" + workpackageID.ToString() + "_2" + "_" + counter.ToString(),
                             _contractor = "company name",
@@ -249,31 +278,60 @@ namespace DBT_API.Util
                             }
                         }
                         //string elementTargetIri = domain + "ifc-" + link;
-                        Edge taskEdge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology#hasTarget", elementTargetIri);
+                        Edge taskEdge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#hasTarget", elementTargetIri);
                         taski.Relations = new List<Edge> { taskEdge };
                         nodes.Add(taski);
 
                         string taskTargetIri = domain + "activity" + workpackageID.ToString() + "_2";
-                        Edge actEdge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology#hasTask", taski.IRI);
+                        Edge actEdge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#hasChildProcess", taski.IRI);
                         act2Edges.Add(actEdge);
 
                         counter++;
                     }
 
+                    // add process decomposition
+                    ProcessDecomposition decompAct2 = new()
+                    {
+                        Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology/v2#ProcessDecomposition" },
+                        Domain = domain,
+                        IRI = domain + "decomposition_act_" + workpackageID.ToString() + "_2",
+                        _name = "Process decomposition for activity " + workpackageID.ToString() + "_2",
+                        _decompositionLevel = 2,
+                    };
+
+                    string act2DecompositionTarget = domain + "decomposition_act_" + workpackageID.ToString() + "_2";
+                    Edge act2Decomp = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#isDecomposedInto", act2DecompositionTarget);
+                    act2Edges.Add(act2Decomp);
+
+                    DecompositionCriterium critAct2 = new()
+                    {
+                        Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology/v2#DecompositionCriterium" },
+                        Domain = domain,
+                        IRI = domain + "decomposition_crit_act_" + workpackageID.ToString() + "_2",
+                        _name = "Element",
+                    };
+
+                    string decompAct2CritTarget = domain + "decomposition_crit_wp_" + workpackageID.ToString() + "_2";
+                    Edge decompAct2Crit = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#hasDecompositionCriterium", decompAct2CritTarget);
+                    decompAct2.Relations = new List<Edge> { decompAct2Crit };
+
+                    nodes.Add(decompAct2);
+                    nodes.Add(critAct2);
+
                     act2.Relations = act2Edges;
                     nodes.Add(act2);
 
                     string wpTargetIri2 = domain + "activity" + workpackageID.ToString() + "_2";
-                    Edge wpEdge2 = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology#hasActivity", wpTargetIri2);
+                    Edge wpEdge2 = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#hasChildProcess", wpTargetIri2);
                     wpEdges.Add(wpEdge2);
 
                     // pour concrete
-                    DBT_API.Entities.Activity act3 = new()
+                    AsPlannedProcess act3 = new()
                     {
                         Domain = domain,
                         IRI = domain + "activity" + workpackageID.ToString() + "_3",
                         //_id = 0,
-                        Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology#Activity" },
+                        Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology/v2#AsPlannedProcess" },
                         _name = "Pouring concrete for " + workpackageName,
                         _startTime = startTime,
                         _endTime = endTime,
@@ -287,19 +345,19 @@ namespace DBT_API.Util
                         Domain = domain,
                         IRI = domain + "precondition" + workpackageID.ToString() + "_3_1",
                         //_id
-                        Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology#ProcessPrecondition" },
+                        Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology/v2#ProcessPrecondition" },
                         _fulfilled = false,
                         //_hasSequenceType = SequenceType.StartEnd
                     };
 
                     string pp2TargetIri = domain + "activity" + workpackageID.ToString() + "_2";
-                    Edge pp2Edge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology#requiresProcess", pp2TargetIri);
+                    Edge pp2Edge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#requiresProcess", pp2TargetIri);
                     pp2.Relations = new List<Edge> { pp2Edge };
 
-                    AddEdge(pp2, "https://dtc-ontology.cms.ed.tum.de/ontology#hasSequenceType", SequenceType.StartEnd);
+                    AddEdge(pp2, "https://dtc-ontology.cms.ed.tum.de/ontology/v2#hasSequenceType", SequenceType.StartEnd);
 
                     string act3TargetIri = domain + "precondition" + workpackageID.ToString() + "_3_1";
-                    Edge act3Edge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology#hasPrecondition", act3TargetIri);
+                    Edge act3Edge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#hasPrecondition", act3TargetIri);
                     act3Edges.Add(act3Edge);
 
                     nodes.Add(pp2);
@@ -307,9 +365,9 @@ namespace DBT_API.Util
                     counter = 1;
                     foreach (string link in ifcLinkIDs)
                     {
-                        Taski taski = new()
+                        AsPlannedProcess taski = new()
                         {
-                            Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology#Task" },
+                            Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology/v2#AsPlannedProcess" },
                             Domain = domain,
                             IRI = domain + "task" + workpackageID.ToString() + "_3" + "_" + counter.ToString(),
                             _contractor = "company name",
@@ -329,31 +387,60 @@ namespace DBT_API.Util
                             }
                         }
                         //string elementTargetIri = domain + "ifc-" + link;
-                        Edge taskEdge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology#hasTarget", elementTargetIri);
+                        Edge taskEdge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#hasTarget", elementTargetIri);
                         taski.Relations = new List<Edge> { taskEdge };
                         nodes.Add(taski);
 
                         string taskTargetIri = domain + "activity" + workpackageID.ToString() + "_3";
-                        Edge actEdge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology#hasTask", taski.IRI);
+                        Edge actEdge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#hasChildProcess", taski.IRI);
                         act3Edges.Add(actEdge);
 
                         counter++;
                     }
 
+                    // add process decomposition
+                    ProcessDecomposition decompAct3 = new()
+                    {
+                        Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology/v2#ProcessDecomposition" },
+                        Domain = domain,
+                        IRI = domain + "decomposition_act_" + workpackageID.ToString() + "_3",
+                        _name = "Process decomposition for activity " + workpackageID.ToString() + "_3",
+                        _decompositionLevel = 2,
+                    };
+
+                    string act3DecompositionTarget = domain + "decomposition_act_" + workpackageID.ToString() + "_3";
+                    Edge act3Decomp = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#isDecomposedInto", act3DecompositionTarget);
+                    act3Edges.Add(act3Decomp);
+
+                    DecompositionCriterium critAct3 = new()
+                    {
+                        Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology/v2#DecompositionCriterium" },
+                        Domain = domain,
+                        IRI = domain + "decomposition_crit_act_" + workpackageID.ToString() + "_3",
+                        _name = "Element",
+                    };
+
+                    string decompAct3CritTarget = domain + "decomposition_crit_wp_" + workpackageID.ToString() + "_3";
+                    Edge decompAct3Crit = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#hasDecompositionCriterium", decompAct3CritTarget);
+                    decompAct3.Relations = new List<Edge> { decompAct3Crit };
+
+                    nodes.Add(decompAct3);
+                    nodes.Add(critAct3);
+
                     act3.Relations = act3Edges;
                     nodes.Add(act3);
 
                     string wpTargetIri3 = domain + "activity" + workpackageID.ToString() + "_3";
-                    Edge wpEdge3 = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology#hasActivity", wpTargetIri3);
+                    Edge wpEdge3 = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#hasChildProcess", wpTargetIri3);
                     wpEdges.Add(wpEdge3);
 
                     // remove formwork
-                    DBT_API.Entities.Activity act4 = new()
+                    AsPlannedProcess act4 = new()
                     {
                         Domain = domain,
                         IRI = domain + "activity" + workpackageID.ToString() + "_4",
                         //_id = 0,
-                        Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology#Activity" },
+                        Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology/v2#AsPlannedProcess" },
                         _name = "Remove formwork from " + workpackageName,
                         _startTime = startTime,
                         _endTime = endTime,
@@ -367,19 +454,19 @@ namespace DBT_API.Util
                         Domain = domain,
                         IRI = domain + "precondition" + workpackageID.ToString() + "_4_1",
                         //_id
-                        Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology#ProcessPrecondition" },
+                        Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology/v2#ProcessPrecondition" },
                         _fulfilled = false,
                         //_hasSequenceType = SequenceType.StartEnd
                     };
 
                     string pp3TargetIri = domain + "activity" + workpackageID.ToString() + "_3";
-                    Edge pp3Edge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology#requiresProcess", pp3TargetIri);
+                    Edge pp3Edge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#requiresProcess", pp3TargetIri);
                     pp3.Relations = new List<Edge> { pp3Edge };
 
-                    AddEdge(pp3, "https://dtc-ontology.cms.ed.tum.de/ontology#hasSequenceType", SequenceType.StartEnd);
+                    AddEdge(pp3, "https://dtc-ontology.cms.ed.tum.de/ontology/v2#hasSequenceType", SequenceType.StartEnd);
 
                     string act4TargetIri = domain + "precondition" + workpackageID.ToString() + "_4_1";
-                    Edge act4Edge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology#hasPrecondition", act4TargetIri);
+                    Edge act4Edge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#hasPrecondition", act4TargetIri);
                     act4Edges.Add(act4Edge);
 
                     nodes.Add(pp3);
@@ -387,9 +474,9 @@ namespace DBT_API.Util
                     counter = 1;
                     foreach (string link in ifcLinkIDs)
                     {
-                        Taski taski = new()
+                        AsPlannedProcess taski = new()
                         {
-                            Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology#Task" },
+                            Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology/v2#AsPlannedProcess" },
                             Domain = domain,
                             IRI = domain + "task" + workpackageID.ToString() + "_4" + "_" + counter.ToString(),
                             _contractor = "company name",
@@ -409,23 +496,81 @@ namespace DBT_API.Util
                             }
                         }
                         //string elementTargetIri = domain + "ifc-" + link;
-                        Edge taskEdge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology#hasTarget", elementTargetIri);
+                        Edge taskEdge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#hasTarget", elementTargetIri);
                         taski.Relations = new List<Edge> { taskEdge };
                         nodes.Add(taski);
 
                         string taskTargetIri = domain + "activity" + workpackageID.ToString() + "_4";
-                        Edge actEdge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology#hasTask", taski.IRI);
+                        Edge actEdge = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#hasChildProcess", taski.IRI);
                         act4Edges.Add(actEdge);
 
                         counter++;
                     }
 
+                    // add process decomposition
+                    ProcessDecomposition decompAct4 = new()
+                    {
+                        Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology/v2#ProcessDecomposition" },
+                        Domain = domain,
+                        IRI = domain + "decomposition_act_" + workpackageID.ToString() + "_4",
+                        _name = "Process decomposition for activity " + workpackageID.ToString() + "_4",
+                        _decompositionLevel = 2,
+                    };
+
+                    string act4DecompositionTarget = domain + "decomposition_act_" + workpackageID.ToString() + "_4";
+                    Edge act4Decomp = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#isDecomposedInto", act4DecompositionTarget);
+                    act4Edges.Add(act4Decomp);
+
+                    DecompositionCriterium critAct4 = new()
+                    {
+                        Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology/v2#DecompositionCriterium" },
+                        Domain = domain,
+                        IRI = domain + "decomposition_crit_act_" + workpackageID.ToString() + "_4",
+                        _name = "Element",
+                    };
+
+                    string decompAct4CritTarget = domain + "decomposition_crit_wp_" + workpackageID.ToString() + "_4";
+                    Edge decompAct4Crit = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#hasDecompositionCriterium", decompAct4CritTarget);
+                    decompAct4.Relations = new List<Edge> { decompAct4Crit };
+
+                    nodes.Add(decompAct4);
+                    nodes.Add(critAct4);
+
                     act4.Relations = act4Edges;
                     nodes.Add(act4);
 
                     string wpTargetIri4 = domain + "activity" + workpackageID.ToString() + "_4";
-                    Edge wpEdge4 = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology#hasActivity", wpTargetIri4);
+                    Edge wpEdge4 = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#hasChildProcess", wpTargetIri4);
                     wpEdges.Add(wpEdge4);
+
+                    // add process decomposition
+                    ProcessDecomposition decomp = new()
+                    {
+                        Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology/v2#ProcessDecomposition" },
+                        Domain = domain,
+                        IRI = domain + "decomposition_wp_" + workpackageID.ToString(),
+                        _name = "Process decomposition for work package " + workpackageID.ToString(),
+                        _decompositionLevel = 1,
+                    };
+
+                    string wpDecompositionTarget = domain + "decomposition_wp_" + workpackageID.ToString();
+                    Edge wpDecomp = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#isDecomposedInto", wpDecompositionTarget);
+                    wpEdges.Add(wpDecomp);
+
+                    DecompositionCriterium crit = new()
+                    {
+                        Classes = new List<string> { "https://dtc-ontology.cms.ed.tum.de/ontology/v2#DecompositionCriterium" },
+                        Domain = domain,
+                        IRI = domain + "decomposition_crit_wp_" + workpackageID.ToString(),
+                        _name = "Construction Step",
+                    };
+
+                    string decompCritTarget = domain + "decomposition_crit_wp_" + workpackageID.ToString();
+                    Edge decompCrit = CreateEdge("https://dtc-ontology.cms.ed.tum.de/ontology/v2#hasDecompositionCriterium", decompCritTarget);
+                    decomp.Relations = new List<Edge> { decompCrit };
+
+                    nodes.Add(decomp);
+                    nodes.Add(crit);
 
                     // add workpackage to list of avatars since now all edges are created
                     workPackage.Relations = wpEdges;
